@@ -8,8 +8,62 @@
     xmlns:local="clr-namespace:sweeep"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel>
-        <TextBlock Text="Settings Content Here" />
-        <!--  Additional settings content can go here  -->
-    </StackPanel>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+            <TextBlock
+                FontSize="16"
+                FontWeight="Bold"
+                Text="Setting" />
+
+            <StackPanel Margin="0,10,0,0">
+                <TextBlock Text="Category:" />
+                <TextBox
+                    Name="CategoryTextBox"
+                    TextChanged="InputFields_TextChanged"
+                    Width="200" />
+            </StackPanel>
+
+            <Button
+                Click="AddRecord_Click"
+                Content="Add Category"
+                IsEnabled="False"
+                Margin="0,10,0,0"
+                Width="100"
+                x:Name="AddCategoryButton" />
+        </StackPanel>
+
+        <ListView
+            Grid.Column="1"
+            ItemsSource="{Binding Category}"
+            Margin="0,10,0,0"
+            Name="CategoryListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="Name: " />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button
+                                Click="EditCategory_Click"
+                                CommandParameter="{Binding}"
+                                Content="Edit" />
+                            <Button
+                                Click="DeleteCategory_Click"
+                                CommandParameter="{Binding}"
+                                Content="Delete" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </UserControl>

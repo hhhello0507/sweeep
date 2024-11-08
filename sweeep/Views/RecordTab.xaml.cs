@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using sweeep.Local;
 
 namespace sweeep;
 
@@ -16,6 +17,7 @@ public partial class RecordTab : UserControl
     {
         InitializeComponent();
         RecordListView.ItemsSource = Records;
+        RecordCache.Instance.GetAll().ForEach(record => Records.Add(record));
     }
 
     private void AddRecord_Click(object sender, RoutedEventArgs e)
@@ -25,19 +27,25 @@ public partial class RecordTab : UserControl
         var amountText = AmountTextBox.Text;
         var memoText = MemoTextBox.Text;
 
+        if (!CategoryCache.Instance.GetAll().Select(w => w.Name).Contains(categoryText))
+        {
+            MessageBox.Show("You must enter exist category name");
+            return;
+        }
+
         // Create
         if (_selectedRecord == null)
         {
             // Create record
             var record = new Record
             {
-                Id = Records.Count > 0 ? Records.Max(r => r.Id) + 1 : 1, // ID를 자동으로 생성
                 Date = dateText.Value,
                 Amount = amountText,
                 Category = categoryText,
                 Memo = memoText
             };
-            Records.Add(record);
+            var savedRecord = RecordCache.Instance.Insert(record);
+            Records.Add(savedRecord);
         }
         else
         {
@@ -45,6 +53,7 @@ public partial class RecordTab : UserControl
             _selectedRecord.Category = CategoryTextBox.Text;
             _selectedRecord.Amount = AmountTextBox.Text;
             _selectedRecord.Memo = MemoTextBox.Text;
+            RecordCache.Instance.Edit(_selectedRecord);
         }
 
         DatePicker.SelectedDate = null;
@@ -53,6 +62,7 @@ public partial class RecordTab : UserControl
         MemoTextBox.Clear();
 
         _selectedRecord = null;
+        AddRecordButton.Content = "Add Record";
     }
 
     // 숫자만 입력되도록
@@ -87,6 +97,7 @@ public partial class RecordTab : UserControl
         if (sender is Button { CommandParameter: Record record } button)
         {
             Records.Remove(record); // 선택된 레코드를 삭제
+            RecordCache.Instance.Delete(record.Id);
         }
     }
 
@@ -98,5 +109,6 @@ public partial class RecordTab : UserControl
         CategoryTextBox.Text = record.Category;
         AmountTextBox.Text = record.Amount;
         MemoTextBox.Text = record.Memo;
+        AddRecordButton.Content = "Edit Record";
     }
 }

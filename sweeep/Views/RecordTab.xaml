@@ -93,7 +93,6 @@
                                 Click="EditRecord_Click"
                                 CommandParameter="{Binding}"
                                 Content="Edit" />
-                            <!--  CommandParameter에 현재 레코드 바인딩  -->
                             <Button
                                 Click="DeleteRecord_Click"
                                 CommandParameter="{Binding}"
