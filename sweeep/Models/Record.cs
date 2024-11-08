@@ -8,7 +8,7 @@ public class Record : INotifyPropertyChanged
 {
     private int _id;
     private DateTime _date;
-    private string _amount;
+    private int _amount;
     private string _category;
     private string _memo;
 
@@ -32,7 +32,7 @@ public class Record : INotifyPropertyChanged
         }
     }
 
-    public string Amount
+    public int Amount
     {
         get => _amount;
         set

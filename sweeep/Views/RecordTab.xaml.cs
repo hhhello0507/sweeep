@@ -40,7 +40,7 @@ public partial class RecordTab : UserControl
             var record = new Record
             {
                 Date = dateText.Value,
-                Amount = amountText,
+                Amount = int.Parse(amountText),
                 Category = categoryText,
                 Memo = memoText
             };
@@ -51,7 +51,7 @@ public partial class RecordTab : UserControl
         {
             _selectedRecord.Date = DatePicker.SelectedDate.Value;
             _selectedRecord.Category = CategoryTextBox.Text;
-            _selectedRecord.Amount = AmountTextBox.Text;
+            _selectedRecord.Amount = int.Parse(AmountTextBox.Text);
             _selectedRecord.Memo = MemoTextBox.Text;
             RecordCache.Instance.Edit(_selectedRecord);
         }
@@ -107,7 +107,7 @@ public partial class RecordTab : UserControl
         _selectedRecord = record; // 현재 수정 중인 레코드 저장
         DatePicker.SelectedDate = record.Date; // 수정할 레코드의 값을 입력 필드에 채우기
         CategoryTextBox.Text = record.Category;
-        AmountTextBox.Text = record.Amount;
+        AmountTextBox.Text = record.Amount.ToString();
         MemoTextBox.Text = record.Memo;
         AddRecordButton.Content = "Edit Record";
     }
